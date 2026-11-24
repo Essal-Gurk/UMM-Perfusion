@@ -1,0 +1,116 @@
+key|tr|ar
+button.run|Hesapla|احسب
+field.output|Çıktı|الإخراج
+option.save|Yeni DICOM serileri olarak da kaydet|احفظ أيضًا كسلاسل DICOM جديدة
+help.output|Kapalıyken seçili haritalar yalnızca bellekte açılır. Açıkken IsiX veritabanına da kaydedilir. Bu seçim hatırlanır.|عند إيقاف الخيار تُفتح الخرائط المحددة في الذاكرة فقط. وعند تفعيله تُحفظ أيضًا في قاعدة بيانات IsiX. يُحتفظ بهذا الاختيار.
+help.selection|Görüntülenecek veya kaydedilecek haritaları seçin. Seçim her model için hatırlanır. Yalnızca Ktrans seçilse bile model parametreleri birlikte uydurulur.|اختر الخرائط المراد عرضها أو حفظها. يُحتفظ بالاختيار لكل نموذج. تُقدّر معلمات النموذج معًا حتى عند اختيار Ktrans وحده.
+error.selection|En az bir sonuç haritası seçin.|اختر خريطة نتائج واحدة على الأقل.
+stage.preview|%1$@ yeni pencerede açılıyor…|جارٍ فتح %1$@ في نافذة جديدة…
+title|UMM Perfusion|UMM Perfusion
+menu|UMM Perfüzyon…|إرواء UMM…
+research|Araştırma sürümü · klinik doğrulama bekleniyor|نسخة بحثية · التحقق السريري قيد الانتظار
+section.source|Kaynak ve arteriyel giriş fonksiyonu|المصدر ودالة الإدخال الشرياني
+section.model|Model ayarları|إعدادات النموذج
+section.status|İlerleme ve sonuçlar|التقدم والنتائج
+field.series|Seri|السلسلة
+field.dimensions|Boyutlar|الأبعاد
+field.roi|Arteriyel ROI (AIF)|منطقة الاهتمام الشريانية (AIF)
+field.model|Perfüzyon modeli|نموذج الإرواء
+field.signal|Sinyal dönüşümü|تحويل الإشارة
+field.baseline|Başlangıç fazları|أطوار خط الأساس
+field.interval|Yedek faz aralığı [s]|الفاصل الزمني البديل [ثانية]
+field.hct|Hematokrit|الهيماتوكريت
+field.regularization|Düzenlileştirme|التنظيم
+field.threshold|Düşük sinyal eşiği [%]|عتبة الإشارة المنخفضة [%]
+field.maps|Sonuç haritaları|خرائط النتائج
+button.refresh|ROI’yi yenile|حدّث منطقة الاهتمام
+button.cancel|İptal|إلغاء
+button.calculate|Hesapla ve kaydet|احسب واحفظ
+button.reopen|Kaydedilmiş sonuçları aç|افتح النتائج المحفوظة
+help.series|Bağlı IsiX görüntüleyicisinden okunan etkin 4D seri.|سلسلة رباعية الأبعاد نشطة تُقرأ من عارض IsiX المتصل.
+help.dimensions|IsiX tarafından algılanan kesit ve zaman fazı sayısı.|عدد الشرائح والأطوار الزمنية التي اكتشفها IsiX.
+help.roi|Geçerli kesitte bir arter içine alan ROI’si çizin veya seçin. IsiX her fazda aynı konturu ölçer.|ارسم أو اختر منطقة اهتمام مساحية داخل شريان في الشريحة الحالية. يقيس IsiX المحيط نفسه في كل طور.
+help.model|Standart Tofts, Ktrans ve ve değerlerini tahmin eder. Genişletilmiş Tofts ayrıca vp’yi tahmin eder. Dekonvolüsyon akım, hacim ve geçiş süresini verir.|يقدّر نموذج Tofts القياسي Ktrans وve. ويقدّر Tofts الموسّع أيضًا vp. يحسب فك الالتفاف التدفق والحجم وزمن العبور.
+help.signal|Kaynak çekime uygun dönüşümü seçin. T1 başlangıca göre artışı, DSC ise −ln(S/S₀) kullanır.|اختر التحويل المناسب للتصوير المصدر. يستخدم T1 التعزيز مقارنة بخط الأساس، ويستخدم DSC الصيغة −ln(S/S₀).
+help.baseline|Başlangıç sinyali S₀’ı tahmin etmek için kullanılan, kontrast gelmeden önceki ilk fazların sayısı.|عدد الأطوار الأولى قبل وصول مادة التباين المستخدمة لتقدير إشارة خط الأساس S₀.
+help.interval|DICOM çekim zamanları eksikse veya artmıyorsa kullanılan fazlar arası süre.|الزمن بين الأطوار عند غياب أوقات التقاط DICOM أو عدم تزايدها.
+help.hct|Örneğin 0,45 gibi bir oran girin. Plazma AIF = kan AIF / (1 − hematokrit).|أدخل نسبة مثل 0.45. ‏AIF البلازما = AIF الدم / (1 − الهيماتوكريت).
+help.regularization|Dekonvolüsyon için ridge düzenlileştirmesini kontrol eder. Daha yüksek değerler daha güçlü düzenlileştirme sağlar.|يضبط تنظيم ريدج لفك الالتفاف. تؤدي القيم الأعلى إلى تنظيم أقوى.
+help.threshold|Her kesitteki en yüksek başlangıç sinyalinin bu yüzdesinde veya altında kalan pikselleri maskeler.|يحجب وحدات البكسل التي لا تتجاوز هذه النسبة من أعلى إشارة لخط الأساس في كل شريحة.
+help.maps|Her harita ayrı bir DICOM serisi olarak kaydedilir. R² uyum kalitesini ölçer.|تُحفظ كل خريطة كسلسلة DICOM مستقلة. يقيس R² جودة الملاءمة.
+help.progress|İlerleme, AIF ölçümünü, kesit uydurmasını, DICOM dışa aktarımını ve sonuç pencerelerinin açılmasını kapsar.|يشمل التقدم قياس AIF وملاءمة الشرائح وتصدير DICOM وفتح نوافذ النتائج.
+help.cancel|Geçerli işlemden sonra durdurur. Kaydedilmiş seriler çalışmada kalır.|يتوقف بعد العملية الحالية. تبقى السلاسل المحفوظة بالفعل في الدراسة.
+help.calculate|Modeli uydurur ve seçili haritaları açar. Çalışmada tutmak için DICOM kaydını etkinleştirin.|يلائم النموذج ويفتح الخرائط المحددة. فعّل حفظ DICOM للاحتفاظ بها في الدراسة.
+help.reopen|IsiX veritabanını kullanarak kalan kaydedilmiş haritaları yeniden açmayı dener.|يعيد محاولة فتح الخرائط المحفوظة المتبقية من قاعدة بيانات IsiX.
+dimensions|%1$@ kesit × %2$@ faz|%1$@ شريحة × %2$@ طور
+results.count|%1$@ seri kaydedildi · %2$@ açıldı|تم حفظ %1$@ سلسلة · تم فتح %2$@
+roi.none|Tek bir alan ROI’si belirlenemedi|لم تُحدّد منطقة اهتمام مساحية واحدة
+roi.unnamed|Adsız ROI|منطقة اهتمام بلا اسم
+series.unnamed|Adsız seri|سلسلة بلا اسم
+model.standard|Standart Tofts|Tofts القياسي
+model.extended|Genişletilmiş Tofts|Tofts الموسّع
+model.deconvolution|Düzenlileştirilmiş dekonvolüsyon|فك الالتفاف المنظّم
+signal.relative|T1-DCE · göreli artış|T1-DCE · تعزيز نسبي
+signal.absolute|T1-DCE · mutlak artış|T1-DCE · تعزيز مطلق
+signal.dsc|T2*-DSC · −ln(S/S₀)|T2*-DSC · −ln(S/S₀)
+maps.standard|Ktrans, ve ve R²|Ktrans وve وR²
+maps.extended|Ktrans, ve, vp ve R²|Ktrans وve وvp وR²
+maps.deconvolution|Plazma akımı, plazma hacmi, MTT ve R²|تدفق البلازما وحجم البلازما وMTT وR²
+map.ktrans|Ktrans|Ktrans
+map.ve|ve|ve
+map.vp|vp|vp
+map.quality|R²|R²
+map.flow|Plazma akımı|تدفق البلازما
+map.volume|Plazma hacmi|حجم البلازما
+map.mtt|MTT|MTT
+status.ready|Arteriyel ROI’yi seçin ve hesaplama ayarlarını kontrol edin.|اختر منطقة الاهتمام الشريانية وتحقق من إعدادات الحساب.
+status.cancelling|İptal ediliyor…|جارٍ الإلغاء…
+status.cancelled|Hesaplama iptal edildi.|أُلغي الحساب.
+status.failed|İşlem durduruldu.|توقفت المعالجة.
+status.dicom|İşlem tamamlandı. DICOM çekim zamanları kullanıldı.|اكتملت المعالجة. استُخدمت أوقات التقاط DICOM.
+status.manual|İşlem tamamlandı. Yedek faz aralığı kullanıldı.|اكتملت المعالجة. استُخدم الفاصل الزمني البديل.
+status.opened|Kaydedilmiş sonuçlar açıldı.|فُتحت النتائج المحفوظة.
+stage.aif|Arteriyel giriş fonksiyonu ölçülüyor…|جارٍ قياس دالة الإدخال الشرياني…
+stage.prepare|Perfüzyon modeli hazırlanıyor…|جارٍ إعداد نموذج الإرواء…
+stage.read|%1$@ / %2$@ kesit okunuyor…|جارٍ قراءة الشريحة %1$@ من %2$@…
+stage.fit|%1$@ / %2$@ kesit uyduruluyor…|جارٍ ملاءمة الشريحة %1$@ من %2$@…
+stage.write|%1$@ DICOM olarak yazılıyor…|جارٍ كتابة %1$@ بصيغة DICOM…
+stage.import|%1$@ IsiX veritabanına kaydediliyor…|جارٍ حفظ %1$@ في قاعدة بيانات IsiX…
+stage.open|Sonuç pencereleri açılıyor…|جارٍ فتح نوافذ النتائج…
+error.stage|%1$@ — %2$@|%1$@ — %2$@
+error.viewer|Bağlı IsiX görüntüleyicisi kapalı.|عارض IsiX المتصل مغلق.
+error.phases|En az dört fazlı bir 4D seri açın.|افتح سلسلة رباعية الأبعاد تتضمن أربعة أطوار على الأقل.
+error.roi|Geçerli kesitte tek bir arteriyel alan ROI’si seçin.|اختر منطقة اهتمام مساحية شريانية واحدة في الشريحة الحالية.
+error.study|Kaynakta DICOM dışa aktarımı için Study Instance UID yok.|يفتقد المصدر معرّف مثيل الدراسة اللازم لتصدير DICOM.
+error.geometry|%1$@. kesitte, %2$@. fazda geometri farklı. Fazlar hizalanmış olmalıdır.|تختلف المعلومات الهندسية في الشريحة %1$@ والطور %2$@. يجب محاذاة الأطوار.
+error.aifPhase|%1$@. fazda arteriyel ROI ölçümü başarısız|فشل قياس منطقة الاهتمام الشريانية في الطور %1$@
+error.aifSignal|Arteriyel ROI sabit veya geçersiz bir sinyal verdi.|أنتجت منطقة الاهتمام الشريانية إشارة ثابتة أو غير صالحة.
+error.changed|İşlem sırasında kaynak seri değişti.|تغيّرت السلسلة المصدر أثناء المعالجة.
+error.scalar|%1$@. kesit, %2$@. faz skaler gri tonlu bir görüntü değil.|الشريحة %1$@ والطور %2$@ ليسا صورة رمادية أحادية القناة.
+error.noFit|Hiçbir vokselde geçerli uyum sağlanamadı. Arteriyel ROI’yi, başlangıç fazlarını ve sinyal dönüşümünü kontrol edin.|لم يحصل أي فوكسل على ملاءمة صالحة. تحقق من منطقة الاهتمام الشريانية وأطوار خط الأساس وتحويل الإشارة.
+error.write|IsiX, %1$@ için her kesite bir DICOM dosyası üretmedi.|لم يُنتج IsiX ملف DICOM لكل شريحة من %1$@.
+error.import|%1$@ içe aktarımı eksik. IsiX, %3$@ dosyadan %2$@ tanesini bildirdi.|استيراد %1$@ غير مكتمل. أبلغ IsiX عن %2$@ ملف من أصل %3$@.
+error.open|IsiX, kaydedilmiş %1$@ seriyi açamadı. Yeniden deneyebilir veya çalışmadan açabilirsiniz.|تعذّر على IsiX فتح %1$@ سلسلة محفوظة. يمكنك إعادة المحاولة أو فتحها من الدراسة.
+error.number|%1$@ için geçerli bir sayı girin.|أدخل رقمًا صالحًا للحقل %1$@.
+error.baseline|En az bir başlangıç fazı seçin ve sonrasında en az iki faz bırakın.|اختر طورًا واحدًا على الأقل لخط الأساس واترك طورين لاحقين على الأقل.
+error.interval|Yedek aralık sıfırdan büyük olmalıdır.|يجب أن يكون الفاصل الزمني البديل أكبر من صفر.
+error.hct|Hematokrit en az 0 ve 0,9’dan küçük olmalıdır.|يجب أن يكون الهيماتوكريت 0 على الأقل وأقل من 0.9.
+error.regularization|Düzenlileştirme 0’dan büyük ve en fazla 1 olmalıdır.|يجب أن تكون قيمة التنظيم أكبر من 0 وألا تتجاوز 1.
+error.threshold|Düşük sinyal eşiği %0 ile %100 arasında olmalıdır.|يجب أن تكون عتبة الإشارة المنخفضة بين 0% و100%.
+error.times|Çekim zamanları sonlu ve kesin artan olmalıdır.|يجب أن تكون أوقات الالتقاط قيمًا محدودة ومتزايدة تمامًا.
+error.count|Sinyal, arteriyel eğri ve zaman örneklerinin boyutları uyumsuz.|أحجام عينات الإشارة والمنحنى الشرياني والزمن غير متوافقة.
+error.singular|Doğrusal sistemi tekil olduğu için model hazırlanamadı.|تعذّر إعداد النموذج لأن نظام المعادلات الخطية منفرد.
+error.config|Perfüzyon ayarlarını gözden geçirin.|راجع إعدادات الإرواء.
+help.ktrans|Ktrans [1/min]: plazma ile damar dışı hücre dışı alan arasındaki transfer sabiti. Seçili modelin parametreleri birlikte uydurulur.|Ktrans [1/min]: ثابت الانتقال بين البلازما والحيز خارج الخلوي خارج الأوعية. تُقدّر معلمات النموذج المحدد معًا.
+help.ve|ve [%]: doku hacminin yüzdesi olarak damar dışı hücre dışı hacim.|ve [%]: حجم الحيز خارج الخلوي خارج الأوعية كنسبة مئوية من حجم النسيج.
+help.vp|vp [%]: Genişletilmiş Tofts ile tahmin edilen, doku hacminin yüzdesi olarak plazma hacmi.|vp [%]: حجم البلازما كنسبة مئوية من حجم النسيج، ويُقدّره نموذج Tofts الموسّع.
+help.flow|Plazma akımı [mL/100mL/min]: düzenlileştirilmiş rezidü fonksiyonunun tepe değerinden, 100 mL doku başına akıma dönüştürülen değer.|تدفق البلازما [mL/100mL/min]: ذروة دالة البقايا المنظّمة بعد تحويلها إلى تدفق لكل 100 مل من النسيج.
+help.volume|Plazma hacmi [%]: düzenlileştirilmiş rezidü fonksiyonunun integrali, doku hacminin yüzdesi olarak ifade edilir.|حجم البلازما [%]: تكامل دالة البقايا المنظّمة، معبّرًا عنه كنسبة مئوية من حجم النسيج.
+help.mtt|MTT [s]: plazma hacminin plazma akımına bölünmesiyle hesaplanan ortalama geçiş süresi.|MTT [ثانية]: متوسط زمن العبور، ويُحسب بقسمة حجم البلازما على تدفق البلازما.
+help.quality|R²: 0 ile 1 arasında gösterilen uyum kalitesi haritası. Daha yüksek değerler model ile ölçülen eğrinin daha iyi uyuştuğunu gösterir.|R²: خريطة جودة الملاءمة المعروضة من 0 إلى 1. تشير القيم الأعلى إلى توافق أفضل بين النموذج والمنحنى المقاس.
+help.standard|Standart Tofts, damar içi plazma katkısını ihmal edilebilir kabul ederek Ktrans ve ve’yi tahmin eder. Aşağıdan sonuç haritalarını seçin.|يقدّر Tofts القياسي Ktrans وve بافتراض أن مساهمة البلازما الوعائية ضئيلة. اختر خرائط النتائج أدناه.
+help.extended|Genişletilmiş Tofts, Ktrans, ve ve vp’yi birlikte tahmin eder. Aşağıdan bir veya daha fazla sonuç haritası seçin.|يقدّر Tofts الموسّع Ktrans وve وvp معًا. اختر خريطة نتائج واحدة أو أكثر أدناه.
+help.deconvolution|Düzenlileştirilmiş dekonvolüsyon plazma akımını, plazma hacmini ve MTT’yi tahmin eder. Düzenlileştirme sayısal kararlılığı kontrol eder.|يقدّر فك الالتفاف المنظّم تدفق البلازما وحجم البلازما وMTT. يضبط التنظيم الاستقرار العددي.
+help.relative|T1-DCE, konsantrasyon yerine (S − S₀) / S₀ kullanır. S₀ başlangıç fazlarının ortalama sinyalidir.|يستخدم T1-DCE الصيغة (S − S₀) / S₀ كبديل للتركيز. S₀ هي متوسط إشارة أطوار خط الأساس.
+help.absolute|T1-DCE, konsantrasyon yerine S − S₀ kullanır. S₀ başlangıç fazlarının ortalama sinyalidir.|يستخدم T1-DCE الصيغة S − S₀ كبديل للتركيز. S₀ هي متوسط إشارة أطوار خط الأساس.
+help.dsc|T2*-DSC, konsantrasyon yerine −ln(S/S₀) kullanır. Sinyaller pozitif olmalıdır ve S₀ ortalama başlangıç sinyalidir.|يستخدم T2*-DSC الصيغة −ln(S/S₀) كبديل للتركيز. يجب أن تكون الإشارات موجبة، وS₀ هي متوسط إشارة خط الأساس.

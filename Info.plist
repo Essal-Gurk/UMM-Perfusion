@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleIdentifier</key><string>org.umm-perfusion.isix.native</string>
+    <key>CFBundleName</key><string>UMMPerfusionIsiX</string>
+    <key>CFBundleExecutable</key><string>UMMPerfusionIsiX</string>
+    <key>CFBundlePackageType</key><string>BNDL</string>
+    <key>CFBundleShortVersionString</key><string>0.4</string>
+    <key>CFBundleVersion</key><string>7</string>
+    <key>CFBundleDevelopmentRegion</key><string>en</string>
+    <key>NSPrincipalClass</key><string>UMMPerfusionIsiX.UMMPerfusionIsiXPlugin</string>
+    <key>IsiXPluginAPIVersion</key><integer>1</integer>
+    <key>IsiXPluginCapabilities</key>
+    <array>
+        <string>viewer.read</string>
+        <string>viewer.write</string>
+        <string>roi</string>
+        <string>database.read</string>
+        <string>database.import</string>
+    </array>
+    <key>LSMinimumSystemVersion</key><string>15.0</string>
+</dict>
+</plist>

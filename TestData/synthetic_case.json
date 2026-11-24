@@ -1,0 +1,32 @@
+{
+  "schema": "org.umm-perfusion.isix.synthetic-fixture.v1",
+  "description": "Non-patient deterministic DCE fixture mirrored by PerfusionEngineTests.swift",
+  "timeSeconds": {
+    "start": 0.0,
+    "step": 5.0,
+    "count": 24
+  },
+  "aif": {
+    "type": "delayed-gamma-like",
+    "delaySeconds": 15.0,
+    "formulaAfterDelay": "4.0 * ((t - 15) / 10) * exp(-(t - 15) / 14)"
+  },
+  "signal": {
+    "mode": "relativeT1",
+    "baseline": 1000.0,
+    "formula": "S(t) = 1000 * (1 + C(t))",
+    "baselineFrames": 3,
+    "hematocrit": 0.0
+  },
+  "standardTofts": {
+    "KtransPerMinute": 0.42,
+    "veFraction": 0.36,
+    "vpFraction": 0.0
+  },
+  "extendedTofts": {
+    "KtransPerMinute": 0.31,
+    "veFraction": 0.28,
+    "vpFraction": 0.07
+  },
+  "containsPatientData": false
+}
