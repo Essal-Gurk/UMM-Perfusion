@@ -1,3 +1,16 @@
+"language.en" = "İngilizce";
+"language.de" = "Almanca";
+"language.fr" = "Fransızca";
+"language.es" = "İspanyolca";
+"language.it" = "İtalyanca";
+"language.pt" = "Portekizce";
+"language.ja" = "Japonca";
+"language.zh-Hans" = "Çince (Basitleştirilmiş)";
+"language.tr" = "Türkçe";
+"language.ar" = "Arapça";
+"error.external" = "İşlem tamamlanamadı (%1$@, kod %2$@).";
+"error.database" = "Kullanılabilir bir IsiX veritabanı yok.";
+"error.capability" = "Eklentide gerekli %1$@ izni eksik.";
 "field.language" = "Dil";
 "language.system" = "Sistem dili";
 "help.language" = "Arayüz dilini seçin. Metinler ve ipuçları hemen değişir. Seçim kaydedilir. Hesaplama çalışmıyorken kullanılabilir.";

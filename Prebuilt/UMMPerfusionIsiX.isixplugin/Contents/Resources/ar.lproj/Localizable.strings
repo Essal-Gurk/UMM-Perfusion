@@ -1,3 +1,16 @@
+"language.en" = "الإنجليزية";
+"language.de" = "الألمانية";
+"language.fr" = "الفرنسية";
+"language.es" = "الإسبانية";
+"language.it" = "الإيطالية";
+"language.pt" = "البرتغالية";
+"language.ja" = "اليابانية";
+"language.zh-Hans" = "الصينية المبسطة";
+"language.tr" = "التركية";
+"language.ar" = "العربية";
+"error.external" = "تعذّر إكمال العملية (%1$@، الرمز %2$@).";
+"error.database" = "لا تتوفر قاعدة بيانات IsiX.";
+"error.capability" = "يفتقد الملحق الإذن المطلوب %1$@.";
 "field.language" = "اللغة";
 "language.system" = "لغة النظام";
 "help.language" = "اختر لغة الواجهة. تتغير النصوص والتلميحات فورًا ويُحفظ الاختيار. متاح عندما لا يكون الحساب قيد التشغيل.";

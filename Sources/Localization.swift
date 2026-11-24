@@ -60,3 +60,38 @@ func L(_ key: String, _ arguments: any CustomStringConvertible...) -> String {
     }
     return String(format: format, locale: locale, arguments: values)
 }
+
+// Store keys and typed arguments for messages that must survive language changes.
+indirect enum PerfusionText: Sendable, Equatable {
+    case message(String, [PerfusionText])
+    case literal(String)
+    case integer(Int)
+
+    func rendered(language: String = PerfusionLocalization.language) -> String {
+        switch self {
+        case .literal(let value): return value
+        case .integer(let value): return value.formatted(.number.locale(Locale(identifier: language)))
+        case .message(let key, let arguments):
+            let format = PerfusionLocalization.text(key, language: language)
+            guard !arguments.isEmpty else { return format }
+            return String(format: format, locale: Locale(identifier: language),
+                          arguments: arguments.map { $0.rendered(language: language) as any CVarArg })
+        }
+    }
+}
+
+protocol PerfusionTextArgument {
+    var perfusionText: PerfusionText { get }
+}
+extension String: PerfusionTextArgument {
+    var perfusionText: PerfusionText { .literal(self) }
+}
+extension Int: PerfusionTextArgument {
+    var perfusionText: PerfusionText { .integer(self) }
+}
+extension PerfusionText: PerfusionTextArgument {
+    var perfusionText: PerfusionText { self }
+}
+func T(_ key: String, _ arguments: any PerfusionTextArgument...) -> PerfusionText {
+    .message(key, arguments.map(\.perfusionText))
+}

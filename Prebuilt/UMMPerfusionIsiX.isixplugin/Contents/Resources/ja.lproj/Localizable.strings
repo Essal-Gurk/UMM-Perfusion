@@ -1,3 +1,16 @@
+"language.en" = "英語";
+"language.de" = "ドイツ語";
+"language.fr" = "フランス語";
+"language.es" = "スペイン語";
+"language.it" = "イタリア語";
+"language.pt" = "ポルトガル語";
+"language.ja" = "日本語";
+"language.zh-Hans" = "中国語（簡体字）";
+"language.tr" = "トルコ語";
+"language.ar" = "アラビア語";
+"error.external" = "処理を完了できませんでした（%1$@、コード %2$@）。";
+"error.database" = "IsiX データベースを利用できません。";
+"error.capability" = "プラグインに必要な権限 %1$@ がありません。";
 "field.language" = "言語";
 "language.system" = "システム言語";
 "help.language" = "表示言語を選択します。テキストとヘルプはすぐに切り替わり、選択は保存されます。計算中以外に変更できます。";

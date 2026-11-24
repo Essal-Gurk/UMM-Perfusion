@@ -1,4 +1,17 @@
 key|en|fr|de|es|it|pt|ja|zh-Hans
+language.en|English|Anglais|Englisch|Inglés|Inglese|Inglês|英語|英语
+language.de|German|Allemand|Deutsch|Alemán|Tedesco|Alemão|ドイツ語|德语
+language.fr|French|Français|Französisch|Francés|Francese|Francês|フランス語|法语
+language.es|Spanish|Espagnol|Spanisch|Español|Spagnolo|Espanhol|スペイン語|西班牙语
+language.it|Italian|Italien|Italienisch|Italiano|Italiano|Italiano|イタリア語|意大利语
+language.pt|Portuguese|Portugais|Portugiesisch|Portugués|Portoghese|Português|ポルトガル語|葡萄牙语
+language.ja|Japanese|Japonais|Japanisch|Japonés|Giapponese|Japonês|日本語|日语
+language.zh-Hans|Chinese (Simplified)|Chinois simplifié|Chinesisch (vereinfacht)|Chino simplificado|Cinese semplificato|Chinês simplificado|中国語（簡体字）|简体中文
+language.tr|Turkish|Turc|Türkisch|Turco|Turco|Turco|トルコ語|土耳其语
+language.ar|Arabic|Arabe|Arabisch|Árabe|Arabo|Árabe|アラビア語|阿拉伯语
+error.external|The operation could not be completed (%1$@, code %2$@).|L’opération n’a pas pu être terminée (%1$@, code %2$@).|Der Vorgang konnte nicht abgeschlossen werden (%1$@, Code %2$@).|No se pudo completar la operación (%1$@, código %2$@).|Impossibile completare l’operazione (%1$@, codice %2$@).|Não foi possível concluir a operação (%1$@, código %2$@).|処理を完了できませんでした（%1$@、コード %2$@）。|无法完成操作（%1$@，代码 %2$@）。
+error.database|No IsiX database is available.|Aucune base de données IsiX n’est disponible.|Es ist keine IsiX-Datenbank verfügbar.|No hay ninguna base de datos IsiX disponible.|Nessun database IsiX disponibile.|Não está disponível nenhuma base de dados IsiX.|IsiX データベースを利用できません。|没有可用的 IsiX 数据库。
+error.capability|The plugin is missing the required permission %1$@.|Le plugin ne dispose pas de l’autorisation requise %1$@.|Dem Plugin fehlt die erforderliche Berechtigung %1$@.|Al plugin le falta el permiso requerido %1$@.|Il plugin non dispone dell’autorizzazione richiesta %1$@.|O plugin não tem a permissão necessária %1$@.|プラグインに必要な権限 %1$@ がありません。|插件缺少所需权限 %1$@。
 field.language|Language|Langue|Sprache|Idioma|Lingua|Idioma|言語|语言
 language.system|System language|Langue du système|Systemsprache|Idioma del sistema|Lingua di sistema|Idioma do sistema|システム言語|系统语言
 help.language|Select the interface language. Text and tooltips update immediately. The choice is remembered. Available when no calculation is running.|Choisissez la langue de l’interface. Les textes et les infobulles changent immédiatement. Le choix est mémorisé. Disponible hors calcul.|Wählen Sie die Sprache der Oberfläche. Texte und Hilfetexte wechseln sofort. Die Auswahl bleibt gespeichert. Verfügbar, wenn keine Berechnung läuft.|Seleccione el idioma de la interfaz. Los textos y las ayudas cambian al instante. La selección se guarda. Disponible cuando no hay un cálculo en curso.|Scegliere la lingua dell’interfaccia. Testi e suggerimenti cambiano subito. La scelta viene salvata. Disponibile quando nessun calcolo è in corso.|Escolha o idioma da interface. Os textos e as dicas mudam imediatamente. A escolha é guardada. Disponível quando não está a decorrer um cálculo.|表示言語を選択します。テキストとヘルプはすぐに切り替わり、選択は保存されます。計算中以外に変更できます。|选择界面语言。文字和提示将立即切换，选择会保存。可在未进行计算时更改。

@@ -15,7 +15,7 @@ struct PerfusionView: View {
                     )) {
                         Text(L("language.system")).tag("system")
                         ForEach(PerfusionLocalization.languages, id: \.self) { code in
-                            Text(PerfusionLocalization.nativeName(for: code)).tag(code)
+                            Text(L("language." + code)).tag(code)
                         }
                     }
                     .frame(maxWidth: 270)
@@ -51,6 +51,8 @@ struct PerfusionView: View {
             .background(.regularMaterial)
         }
         .frame(minWidth: 650, minHeight: 580)
+        // Recreate native menus and their ForEach content when language changes.
+        .id(PerfusionLocalization.language)
         .environment(\.locale, Locale(identifier: PerfusionLocalization.language))
         .environment(\.layoutDirection, PerfusionLocalization.language == "ar" ? .rightToLeft : .leftToRight)
     }

@@ -42,7 +42,9 @@ catalog.each do |key, translations|
 end
 
 sources = Dir['Sources/*.swift'].map { |path| File.read(path, encoding: 'UTF-8') }.join("\n")
-keys = sources.scan(/(?:\bL\(|\bMapDefinition\(|\bkey: )"([\w.]+)"/).flatten.uniq
+keys = sources.scan(/(?:\b[LT]\(|\bMapDefinition\(|\bkey: )"([\w.]+)"/).flatten.uniq
+keys += languages.map { |locale| "language.#{locale}" }
+keys.reject! { |key| key.end_with?('.') }
 missing = keys - catalog.keys
 abort "Add all ten translations for: #{missing.sort.join(', ')}" unless missing.empty?
 

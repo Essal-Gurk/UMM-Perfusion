@@ -66,7 +66,7 @@ Every build checks SDK API/kit version, deployment target, arm64 availability
 and the framework/interface hashes against `SDK.json`. The verified manifest
 is included in the plugin resources and in `docs/SDK.json`.
 
-The v0.2 preference domain and settings schema remain in use in v0.4.1, including
+The v0.2 preference domain and settings schema remain in use in v0.4.2, including
 per-model map selections and the optional DICOM saving setting. The stored
 settings contain numerical options and output choices.
 

@@ -1,7 +1,7 @@
-# UMMPerfusionIsiX v0.4.1
+# UMMPerfusionIsiX v0.4.2
 
 GitHub distribution prepared on 24 November 2026.
-Plugin version 0.4.1, build 8. Apple Silicon, macOS 15 or later.
+Plugin version 0.4.2, build 9. Apple Silicon, macOS 15 or later.
 Built with IsiXPluginKit 1.0.0 / API v1 from IsiX 6.0.7.
 
 ## Features
@@ -23,10 +23,15 @@ limitations. Attribution credits the original UMMPerfusion team in Mannheim
 and cites both foundational papers. The existing BSD 3-Clause licence is
 retained.
 
-Build 8 adds the explicit language selector that was absent in v0.4.
-Language resources are selected dynamically when the selection changes.
-The language control is disabled during a calculation. Existing numerical
-settings and per-model output selections retain their stored values.
+Build 9 recreates native menu content on language changes, fixing stale
+German model and signal-conversion entries after switching to English.
+Language names, the host command and generated DICOM series labels follow
+the selected language. Status/error messages retain translation keys and
+typed arguments until display. Unmapped host errors use localized text
+with a diagnostic domain/code.
+
+Calculation parameters and stored model choices retain stable identifiers.
+Source DICOM series names and ROI names are preserved.
 
 ## Verification and limits
 
@@ -34,6 +39,9 @@ The SDK-verified arm64 build, deterministic synthetic tests, ten-language
 catalogue checks, code signature and installer have been checked locally.
 Localization regression tests exercise all ten selections, returning to
 system-language selection, live German/English switching and tooltip lookup.
+They also check model/signal entries, translated language names and nested
+status/error messages across language changes. The experimental
+PickerLocalizationTests helper that caused macOS crash dialogs was removed.
 Independent clinical/DRO validation and complete visual acceptance of all
 language layouts remain outstanding.
 

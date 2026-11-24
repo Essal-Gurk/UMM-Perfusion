@@ -1,7 +1,7 @@
 # UMMPerfusionIsiX
 
 Native MRI perfusion research plugin for IsiX DICOM Viewer on Apple Silicon.
-Version 0.4.1 uses IsiXPluginKit 1.0.0 / API v1, built against the SDK from
+Version 0.4.2 uses IsiXPluginKit 1.0.0 / API v1, built against the SDK from
 IsiX 6.0.7.
 
 This repository includes the Swift source, synthetic tests and a precompiled
@@ -60,6 +60,10 @@ The **Language** menu at the top of the plugin window selects the interface
 language. **System language** follows the preferred system language.
 Labels and mouseover help change immediately, and the selection is retained
 across restarts. Change the language when no calculation is running.
+Model and signal-conversion menus are rebuilt on language changes. Status
+and error messages retain translation keys so they can be rendered again in
+the current language. Language names and generated DICOM series labels also
+follow the chosen language. Source series/ROI names remain source metadata.
 The ten languages are
 English, German, French, Spanish, Italian, Portuguese, Japanese, Simplified
 Chinese, Turkish and Arabic. Arabic uses a right-to-left layout.
@@ -166,6 +170,8 @@ for public examples. See [privacy and security](docs/PRIVACY_SECURITY.md),
 To update text, add translations to `Translations.psv` and
 `Translations-extra.psv`. Every build checks that all ten languages contain
 the same keys and compatible format placeholders.
+Unmapped host errors are shown as a localized message with a diagnostic
+domain and code, so external prose cannot introduce a second UI language.
 
 ## Acknowledgements
 

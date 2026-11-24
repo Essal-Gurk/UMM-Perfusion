@@ -1,3 +1,16 @@
+"language.en" = "Inglés";
+"language.de" = "Alemán";
+"language.fr" = "Francés";
+"language.es" = "Español";
+"language.it" = "Italiano";
+"language.pt" = "Portugués";
+"language.ja" = "Japonés";
+"language.zh-Hans" = "Chino simplificado";
+"language.tr" = "Turco";
+"language.ar" = "Árabe";
+"error.external" = "No se pudo completar la operación (%1$@, código %2$@).";
+"error.database" = "No hay ninguna base de datos IsiX disponible.";
+"error.capability" = "Al plugin le falta el permiso requerido %1$@.";
 "field.language" = "Idioma";
 "language.system" = "Idioma del sistema";
 "help.language" = "Seleccione el idioma de la interfaz. Los textos y las ayudas cambian al instante. La selección se guarda. Disponible cuando no hay un cálculo en curso.";

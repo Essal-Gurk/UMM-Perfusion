@@ -1,4 +1,17 @@
 key|tr|ar
+language.en|İngilizce|الإنجليزية
+language.de|Almanca|الألمانية
+language.fr|Fransızca|الفرنسية
+language.es|İspanyolca|الإسبانية
+language.it|İtalyanca|الإيطالية
+language.pt|Portekizce|البرتغالية
+language.ja|Japonca|اليابانية
+language.zh-Hans|Çince (Basitleştirilmiş)|الصينية المبسطة
+language.tr|Türkçe|التركية
+language.ar|Arapça|العربية
+error.external|İşlem tamamlanamadı (%1$@, kod %2$@).|تعذّر إكمال العملية (%1$@، الرمز %2$@).
+error.database|Kullanılabilir bir IsiX veritabanı yok.|لا تتوفر قاعدة بيانات IsiX.
+error.capability|Eklentide gerekli %1$@ izni eksik.|يفتقد الملحق الإذن المطلوب %1$@.
 field.language|Dil|اللغة
 language.system|Sistem dili|لغة النظام
 help.language|Arayüz dilini seçin. Metinler ve ipuçları hemen değişir. Seçim kaydedilir. Hesaplama çalışmıyorken kullanılabilir.|اختر لغة الواجهة. تتغير النصوص والتلميحات فورًا ويُحفظ الاختيار. متاح عندما لا يكون الحساب قيد التشغيل.

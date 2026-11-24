@@ -10,6 +10,10 @@ public final class UMMPerfusionIsiXPlugin: IsiXPlugin {
     public init() {}
 
     public func activate(with context: IsiXPluginContext) throws {
+        try registerCommand(context: context)
+    }
+
+    private func registerCommand(context: IsiXPluginContext) throws {
         try context.register(
             IsiXCommand(
                 id: "umm-perfusion-native",
@@ -39,6 +43,12 @@ public final class UMMPerfusionIsiXPlugin: IsiXPlugin {
         }
 
         let controller = PerfusionController(context: context, viewer: viewer)
+        controller.languageDidChange = { [weak self, context] in
+            guard let self else { return }
+            context.unregisterCommand(id: "umm-perfusion-native")
+            try self.registerCommand(context: context)
+            self.window?.title = L("title")
+        }
         let hostingController = NSHostingController(rootView: PerfusionView(controller: controller))
         let window = NSWindow(contentViewController: hostingController)
         window.title = L("title")

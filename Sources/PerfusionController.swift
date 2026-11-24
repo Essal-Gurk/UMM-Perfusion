@@ -13,30 +13,49 @@ private struct PerfusionInput: Sendable {
 }
 
 enum PerfusionPluginError: LocalizedError {
-    case invalidInput(String)
-    case stage(String, any Error)
+    case invalidInput(PerfusionText)
+    case stage(PerfusionText, any Error)
 
-    var errorDescription: String? {
+    var errorDescription: String? { displayMessage.rendered() }
+
+    var displayMessage: PerfusionText {
         switch self {
         case .invalidInput(let message): return message
         case .stage(let stage, let error):
-            let detail = (error as? PerfusionEngineError)?.displayMessage ?? error.localizedDescription
-            return L("error.stage", stage, detail)
+            return T("error.stage", stage, localizedFailure(error))
         }
     }
 }
 
 private extension PerfusionEngineError {
-    var displayMessage: String {
+    var displayMessage: PerfusionText {
         switch self {
-        case .insufficientTimepoints: L("error.phases")
-        case .invalidBaseline: L("error.baseline")
-        case .invalidTimes: L("error.times")
-        case .countMismatch: L("error.count")
-        case .singularSystem: L("error.singular")
-        case .invalidConfiguration: L("error.config")
+        case .insufficientTimepoints: T("error.phases")
+        case .invalidBaseline: T("error.baseline")
+        case .invalidTimes: T("error.times")
+        case .countMismatch: T("error.count")
+        case .singularSystem: T("error.singular")
+        case .invalidConfiguration: T("error.config")
         }
     }
+}
+
+private func localizedFailure(_ error: any Error) -> PerfusionText {
+    if let error = error as? PerfusionPluginError { return error.displayMessage }
+    if let error = error as? PerfusionEngineError { return error.displayMessage }
+    if let error = error as? IsiXPluginError {
+        switch error {
+        case .viewerClosed: return T("error.viewer")
+        case .roiNotFound, .unsupportedROIKind, .invalidROI: return T("error.roi")
+        case .staleImage: return T("error.changed")
+        case .dimensionMismatch: return T("error.count")
+        case .noDatabase: return T("error.database")
+        case .capabilityNotDeclared(let capability): return T("error.capability", capability.rawValue)
+        default: break
+        }
+    }
+    let diagnostic = error as NSError
+    return T("error.external", diagnostic.domain, diagnostic.code)
 }
 
 @MainActor
@@ -51,8 +70,10 @@ final class PerfusionController: ObservableObject {
     @Published private(set) var sliceCount = 0
     @Published private(set) var phaseCount = 0
     @Published private(set) var selectedROIName = L("roi.none")
-    @Published private(set) var statusMessage = L("status.ready")
-    @Published private(set) var errorMessage: String?
+    @Published private var statusText = T("status.ready")
+    var statusMessage: String { statusText.rendered() }
+    @Published private var errorText: PerfusionText?
+    var errorMessage: String? { errorText?.rendered() }
     @Published private(set) var progress: Double?
     @Published private(set) var savedCount = 0
     @Published private(set) var openedCount = 0
@@ -60,19 +81,18 @@ final class PerfusionController: ObservableObject {
     @Published private(set) var isCancelling = false
     @Published private(set) var canRetryOpening = false
     @Published private(set) var languageChoice = PerfusionLocalization.preference
+    var languageDidChange: (() throws -> Void)?
 
     func changeLanguage(to choice: String) {
         guard !isRunning else { return }
-        let oldLanguage = PerfusionLocalization.language
-        let statusKeys = ["status.ready", "status.cancelled", "status.failed", "status.dicom",
-                          "status.manual", "status.opened", "stage.aif"]
-        let statusKey = statusKeys.first {
-            PerfusionLocalization.text($0, language: oldLanguage) == statusMessage
-        }
         PerfusionLocalization.preference = choice
         languageChoice = PerfusionLocalization.preference
-        if let statusKey { statusMessage = L(statusKey) }
         refresh()
+        do {
+            try languageDidChange?()
+        } catch {
+            errorText = localizedFailure(error)
+        }
     }
 
     @Published var model: PerfusionModel = .standardTofts { didSet { persistSettings() } }
@@ -139,7 +159,7 @@ final class PerfusionController: ObservableObject {
     func refresh() {
         guard !isRunning else { return }
         do {
-            guard viewer.isOpen else { throw PerfusionPluginError.invalidInput(L("error.viewer")) }
+            guard viewer.isOpen else { throw PerfusionPluginError.invalidInput(T("error.viewer")) }
             let summary = try viewer.series()
             seriesDescription = summary.seriesDescription ?? L("series.unnamed")
             sliceCount = summary.sliceCount
@@ -150,40 +170,42 @@ final class PerfusionController: ObservableObject {
                 $0.name.isEmpty ? L("roi.unnamed") : $0.name
             } ?? L("roi.none")
             if progress == nil {
-                statusMessage = L("status.ready")
-                errorMessage = nil
+                statusText = T("status.ready")
+                errorText = nil
             }
         } catch {
             phaseCount = 0
-            errorMessage = error.localizedDescription
+            errorText = localizedFailure(error)
         }
     }
 
     func calculateAndExport() {
         guard !isRunning else { return }
         progress = 0
-        errorMessage = nil
+        errorText = nil
         savedCount = 0
         openedCount = 0
         pendingViewers.removeAll()
         canRetryOpening = false
-        statusMessage = L("stage.aif")
+        statusText = T("stage.aif")
         do {
             let (configuration, fallbackDelta) = try parseSettings()
             let selection = selectedMaps
             guard !selection.isEmpty else {
-                throw PerfusionPluginError.invalidInput(L("error.selection"))
+                throw PerfusionPluginError.invalidInput(T("error.selection"))
             }
             let shouldSave = saveDICOM
             let source = viewer
-            let job = try context.startTask(named: L("title")) { [weak self, context] progress in
+            let messages = PerfusionProgressMessages()
+            let job = try context.startTask(named: L("title")) { [weak self, context] hostProgress in
+                let progress = PerfusionProgress(host: hostProgress, messages: messages)
                 try Self.checkCancellation(progress)
-                progress.report(0, message: L("stage.aif"))
+                progress.report(0, message: T("stage.aif"))
                 let input = try await Self.captureInput(
                     viewer: source, fallbackDelta: fallbackDelta, requiresStudy: shouldSave, progress: progress
                 )
                 await self?.showInput(input)
-                progress.report(0.04, message: L("stage.prepare"))
+                progress.report(0.04, message: T("stage.prepare"))
                 let prepared = try PerfusionEngine.prepare(
                     aifSignal: input.aif, timesSeconds: input.times, configuration: configuration
                 )
@@ -199,7 +221,7 @@ final class PerfusionController: ObservableObject {
                         self?.pendingViewers.append(uid)
                     }
                     try Self.checkCancellation(progress)
-                    progress.report(0.98, message: L("stage.open"))
+                    progress.report(0.98, message: T("stage.open"))
                     await self?.openSavedResults()
                 } else {
                     try await Self.showInMemory(
@@ -208,30 +230,29 @@ final class PerfusionController: ObservableObject {
                         self?.openedCount += 1
                     }
                 }
-                progress.report(1, message: input.usesDICOMTimes ? L("status.dicom") : L("status.manual"))
+                progress.report(1, message: input.usesDICOMTimes ? T("status.dicom") : T("status.manual"))
             }
             currentTask = job
             isRunning = true
             Task { [weak self] in
                 while !job.isFinished, self != nil {
-                    self?.updateProgress(job)
+                    self?.updateProgress(job, messages: messages)
                     try? await Task.sleep(for: .milliseconds(120))
                 }
                 guard let self else { return }
-                self.updateProgress(job)
+                self.updateProgress(job, messages: messages)
                 do {
                     try await job.value()
                     if self.isCancelling, job.progress.fractionCompleted < 1 {
                         throw CancellationError()
                     }
                 } catch {
-                    let stage = job.progress.message ?? self.statusMessage
+                    let stage = messages.latest ?? self.statusText
                     if error is CancellationError || self.isCancelling || job.progress.isCancelled {
-                        self.statusMessage = L("status.cancelled")
+                        self.statusText = T("status.cancelled")
                     } else {
-                        self.statusMessage = L("status.failed")
-                        self.errorMessage = (error as? PerfusionPluginError)?.errorDescription
-                            ?? PerfusionPluginError.stage(stage, error).localizedDescription
+                        self.statusText = T("status.failed")
+                        self.errorText = PerfusionPluginError.stage(stage, error).displayMessage
                     }
                 }
                 self.currentTask = nil
@@ -240,16 +261,16 @@ final class PerfusionController: ObservableObject {
                 self.canRetryOpening = !self.pendingViewers.isEmpty
             }
         } catch {
-            statusMessage = L("status.failed")
-            errorMessage = error.localizedDescription
+            statusText = T("status.failed")
+            errorText = localizedFailure(error)
         }
     }
 
-    private func updateProgress(_ job: IsiXTask) {
+    private func updateProgress(_ job: IsiXTask, messages: PerfusionProgressMessages) {
         let fraction = job.progress.fractionCompleted
         if fraction != progress { progress = fraction }
-        if !isCancelling, let message = job.progress.message, message != statusMessage {
-            statusMessage = message
+        if !isCancelling, let message = messages.latest, message != statusText {
+            statusText = message
         }
     }
 
@@ -263,16 +284,16 @@ final class PerfusionController: ObservableObject {
     func cancel() {
         guard isRunning, !isCancelling else { return }
         isCancelling = true
-        statusMessage = L("status.cancelling")
+        statusText = T("status.cancelling")
         currentTask?.cancel()
     }
 
     func retryOpening() {
         guard !isRunning, canRetryOpening else { return }
-        errorMessage = nil
+        errorText = nil
         openSavedResults()
         canRetryOpening = !pendingViewers.isEmpty
-        if !canRetryOpening { statusMessage = L("status.opened") }
+        if !canRetryOpening { statusText = T("status.opened") }
     }
 
     private func openSavedResults() {
@@ -291,9 +312,9 @@ final class PerfusionController: ObservableObject {
                 }
             }
             pendingViewers = failed
-            if !failed.isEmpty { errorMessage = L("error.open", failed.count) }
+            if !failed.isEmpty { errorText = T("error.open", failed.count) }
         } catch {
-            errorMessage = PerfusionPluginError.stage(L("stage.open"), error).localizedDescription
+            errorText = PerfusionPluginError.stage(T("stage.open"), error).displayMessage
         }
     }
 
@@ -301,28 +322,28 @@ final class PerfusionController: ObservableObject {
         func number(_ value: String, key: String) throws -> Double {
             guard let parsed = Double(value.trimmingCharacters(in: .whitespacesAndNewlines)
                 .replacingOccurrences(of: ",", with: ".")), parsed.isFinite else {
-                throw PerfusionPluginError.invalidInput(L("error.number", L(key)))
+                throw PerfusionPluginError.invalidInput(T("error.number", T(key)))
             }
             return parsed
         }
         guard let baseline = Int(baselineFramesText.trimmingCharacters(in: .whitespacesAndNewlines)),
               baseline > 0 else {
-            throw PerfusionPluginError.invalidInput(L("error.baseline"))
+            throw PerfusionPluginError.invalidInput(T("error.baseline"))
         }
         let delta = try number(temporalResolutionText, key: "field.interval")
         let hct = try number(hematocritText, key: "field.hct")
         let regularization = model == .deconvolution
             ? try number(regularizationText, key: "field.regularization") : 0.15
         let threshold = try number(lowSignalPercentText, key: "field.threshold")
-        guard delta > 0 else { throw PerfusionPluginError.invalidInput(L("error.interval")) }
+        guard delta > 0 else { throw PerfusionPluginError.invalidInput(T("error.interval")) }
         guard (0..<0.9).contains(hct) else {
-            throw PerfusionPluginError.invalidInput(L("error.hct"))
+            throw PerfusionPluginError.invalidInput(T("error.hct"))
         }
         guard regularization > 0, regularization <= 1 else {
-            throw PerfusionPluginError.invalidInput(L("error.regularization"))
+            throw PerfusionPluginError.invalidInput(T("error.regularization"))
         }
         guard (0...100).contains(threshold) else {
-            throw PerfusionPluginError.invalidInput(L("error.threshold"))
+            throw PerfusionPluginError.invalidInput(T("error.threshold"))
         }
         return (PerfusionConfiguration(model: model, signalMode: signalMode, baselineFrames: baseline,
             hematocrit: hct, regularization: regularization, lowSignalFraction: threshold / 100), delta)
@@ -336,38 +357,38 @@ final class PerfusionController: ObservableObject {
     }
 
     private static func captureInput(
-        viewer: IsiXViewer, fallbackDelta: Double, requiresStudy: Bool, progress: IsiXTaskProgress
+        viewer: IsiXViewer, fallbackDelta: Double, requiresStudy: Bool, progress: PerfusionProgress
     ) throws -> PerfusionInput {
-        guard viewer.isOpen else { throw PerfusionPluginError.invalidInput(L("error.viewer")) }
+        guard viewer.isOpen else { throw PerfusionPluginError.invalidInput(T("error.viewer")) }
         let summary = try viewer.series()
         guard summary.phaseCount >= 4, summary.sliceCount > 0 else {
-            throw PerfusionPluginError.invalidInput(L("error.phases"))
+            throw PerfusionPluginError.invalidInput(T("error.phases"))
         }
         let position = try viewer.currentPosition()
         guard let roi = arterialROI(in: try viewer.rois(slice: position.slice, phase: position.phase)) else {
-            throw PerfusionPluginError.invalidInput(L("error.roi"))
+            throw PerfusionPluginError.invalidInput(T("error.roi"))
         }
         let reference = try viewer.attributes(slice: 0, phase: 0)
         let studyUID = summary.studyInstanceUID ?? reference.studyInstanceUID ?? ""
-        if requiresStudy, studyUID.isEmpty { throw PerfusionPluginError.invalidInput(L("error.study")) }
+        if requiresStudy, studyUID.isEmpty { throw PerfusionPluginError.invalidInput(T("error.study")) }
         let geometry = try viewer.geometry(slice: roi.slice, phase: roi.phase)
         var aif: [Double] = []
         var dates: [Date?] = []
         for phase in 0..<summary.phaseCount {
             try checkCancellation(progress)
-            progress.report(0.04 * Double(phase) / Double(summary.phaseCount), message: L("stage.aif"))
+            progress.report(0.04 * Double(phase) / Double(summary.phaseCount), message: T("stage.aif"))
             guard geometryMatches(geometry, try viewer.geometry(slice: roi.slice, phase: phase)) else {
-                throw PerfusionPluginError.invalidInput(L("error.geometry", roi.slice + 1, phase + 1))
+                throw PerfusionPluginError.invalidInput(T("error.geometry", roi.slice + 1, phase + 1))
             }
             do {
                 aif.append(try viewer.statistics(of: roi.id, slice: roi.slice, phase: phase).mean)
             } catch {
-                throw PerfusionPluginError.stage(L("error.aifPhase", phase + 1), error)
+                throw PerfusionPluginError.stage(T("error.aifPhase", phase + 1), error)
             }
             dates.append(try? viewer.attributes(slice: roi.slice, phase: phase).acquisitionDate)
         }
         guard aif.allSatisfy(\.isFinite), aif.min() != aif.max() else {
-            throw PerfusionPluginError.invalidInput(L("error.aifSignal"))
+            throw PerfusionPluginError.invalidInput(T("error.aifSignal"))
         }
         let timestamps = dates.compactMap { $0 }
         let roiName = roi.name.isEmpty ? L("roi.unnamed") : roi.name
@@ -384,16 +405,16 @@ final class PerfusionController: ObservableObject {
     }
 
     private static func readSlice(
-        _ slice: Int, viewer: IsiXViewer, input: PerfusionInput, progress: IsiXTaskProgress
+        _ slice: Int, viewer: IsiXViewer, input: PerfusionInput, progress: PerfusionProgress
     ) throws -> (IsiXImageGeometry, [[Float]]) {
         try checkCancellation(progress)
-        guard viewer.isOpen else { throw PerfusionPluginError.invalidInput(L("error.viewer")) }
+        guard viewer.isOpen else { throw PerfusionPluginError.invalidInput(T("error.viewer")) }
         let current = try viewer.series()
         guard current.seriesInstanceUID == input.summary.seriesInstanceUID,
               current.studyInstanceUID == input.summary.studyInstanceUID,
               current.sliceCount == input.summary.sliceCount, current.phaseCount == input.summary.phaseCount,
               try viewer.attributes(slice: 0, phase: 0).sopInstanceUID == input.sourceSOPUID else {
-            throw PerfusionPluginError.invalidInput(L("error.changed"))
+            throw PerfusionPluginError.invalidInput(T("error.changed"))
         }
         let geometry = try viewer.geometry(slice: slice, phase: 0)
         var planes: [[Float]] = []
@@ -401,11 +422,11 @@ final class PerfusionController: ObservableObject {
             try checkCancellation(progress)
             let image = try viewer.image(slice: slice, phase: phase)
             guard let pixels = image.scalarPixels, pixels.channels == 1 else {
-                throw PerfusionPluginError.invalidInput(L("error.scalar", slice + 1, phase + 1))
+                throw PerfusionPluginError.invalidInput(T("error.scalar", slice + 1, phase + 1))
             }
             guard geometryMatches(geometry, image.geometry),
                   pixels.width == geometry.columns, pixels.height == geometry.rows else {
-                throw PerfusionPluginError.invalidInput(L("error.geometry", slice + 1, phase + 1))
+                throw PerfusionPluginError.invalidInput(T("error.geometry", slice + 1, phase + 1))
             }
             planes.append(pixels.samples)
         }
@@ -420,7 +441,7 @@ final class PerfusionController: ObservableObject {
 
     nonisolated private static func compute(
         viewer: IsiXViewer, input: PerfusionInput, configuration: PerfusionConfiguration,
-        prepared: PerfusionEngine.PreparedModel, selection: [PerfusionMap], progress: IsiXTaskProgress
+        prepared: PerfusionEngine.PreparedModel, selection: [PerfusionMap], progress: PerfusionProgress
     ) async throws -> Maps {
         var maps = Maps(selection: selection, images: Array(repeating: [], count: selection.count))
         let count = input.summary.sliceCount
@@ -428,9 +449,9 @@ final class PerfusionController: ObservableObject {
         for slice in 0..<count {
             let start = 0.04 + 0.76 * Double(slice) / Double(count)
             let step = 0.76 / Double(count)
-            progress.report(start, message: L("stage.read", slice + 1, count))
+            progress.report(start, message: T("stage.read", slice + 1, count))
             let (geometry, planes) = try await readSlice(slice, viewer: viewer, input: input, progress: progress)
-            let message = L("stage.fit", slice + 1, count)
+            let message = T("stage.fit", slice + 1, count)
             let result = try PerfusionEngine.fitMap(signalPlanes: planes, prepared: prepared, configuration: configuration) {
                 done, total in
                 try checkCancellation(progress)
@@ -444,13 +465,13 @@ final class PerfusionController: ObservableObject {
                 maps.images[index].append(.float32(buffer))
             }
         }
-        guard validVoxels > 0 else { throw PerfusionPluginError.invalidInput(L("error.noFit")) }
+        guard validVoxels > 0 else { throw PerfusionPluginError.invalidInput(T("error.noFit")) }
         return maps
     }
 
     private static func save(
         _ maps: Maps, model: PerfusionModel, input: PerfusionInput, context: IsiXPluginContext,
-        progress: IsiXTaskProgress, didSave: @MainActor @Sendable (String) -> Void
+        progress: PerfusionProgress, didSave: @MainActor @Sendable (String) -> Void
     ) async throws {
         try checkCancellation(progress)
         let database = try context.database()
@@ -458,8 +479,8 @@ final class PerfusionController: ObservableObject {
         for (index, map) in definitions.enumerated() {
             try checkCancellation(progress)
             let start = 0.80 + 0.18 * Double(index) / Double(definitions.count)
-            let name = L(map.key)
-            let writing = L("stage.write", name)
+            let name = T(map.key)
+            let writing = T("stage.write", name)
             progress.report(start, message: writing)
             var request = IsiXDerivedSeriesRequest(studyInstanceUID: input.studyUID,
                 seriesDescription: "UMM Perfusion - \(map.dicomName)", images: maps.images[index])
@@ -474,10 +495,10 @@ final class PerfusionController: ObservableObject {
             }
             defer { removeTemporaryFiles(files) }
             guard files.count == maps.geometries.count else {
-                throw PerfusionPluginError.invalidInput(L("error.write", name))
+                throw PerfusionPluginError.invalidInput(T("error.write", name))
             }
             try checkCancellation(progress)
-            let importing = L("stage.import", name)
+            let importing = T("stage.import", name)
             progress.report(start + 0.09 / Double(definitions.count), message: importing)
             let result: IsiXImportResult
             do {
@@ -488,9 +509,8 @@ final class PerfusionController: ObservableObject {
             let series = Set(result.seriesInstanceUIDs)
             guard result.failures.isEmpty, result.importedFiles.count == files.count,
                   series.count == 1, let uid = series.first, !uid.isEmpty else {
-                let message = L("error.import", name, result.importedFiles.count, files.count)
-                let detail = result.failures.first?.reason
-                throw PerfusionPluginError.invalidInput(detail.map { L("error.stage", message, $0) } ?? message)
+                let message = T("error.import", name, result.importedFiles.count, files.count)
+                throw PerfusionPluginError.invalidInput(message)
             }
             didSave(uid)
         }
@@ -498,24 +518,24 @@ final class PerfusionController: ObservableObject {
 
     private static func showInMemory(
         _ maps: Maps, model: PerfusionModel, viewer: IsiXViewer, input: PerfusionInput,
-        progress: IsiXTaskProgress, didOpen: @MainActor @Sendable () -> Void
+        progress: PerfusionProgress, didOpen: @MainActor @Sendable () -> Void
     ) throws {
-        guard viewer.isOpen else { throw PerfusionPluginError.invalidInput(L("error.viewer")) }
+        guard viewer.isOpen else { throw PerfusionPluginError.invalidInput(T("error.viewer")) }
         let summary = try viewer.series()
         guard summary.seriesInstanceUID == input.summary.seriesInstanceUID,
               summary.studyInstanceUID == input.summary.studyInstanceUID,
               summary.sliceCount == input.summary.sliceCount, summary.phaseCount == input.summary.phaseCount,
               try viewer.attributes(slice: 0, phase: 0).sopInstanceUID == input.sourceSOPUID else {
-            throw PerfusionPluginError.invalidInput(L("error.changed"))
+            throw PerfusionPluginError.invalidInput(T("error.changed"))
         }
         let definitions = mapDefinitions(for: model).filter { maps.selection.map(\.localizationKey).contains($0.key) }
         for (index, definition) in definitions.enumerated() {
             try checkCancellation(progress)
             progress.report(0.80 + 0.19 * Double(index) / Double(definitions.count),
-                            message: L("stage.preview", L(definition.key)))
+                            message: T("stage.preview", T(definition.key)))
             let images = try maps.images[index].enumerated().map { slice, pixels in
                 guard case .float32(let buffer) = pixels else {
-                    throw PerfusionPluginError.invalidInput(L("error.count"))
+                    throw PerfusionPluginError.invalidInput(T("error.count"))
                 }
                 return IsiXDerivedImage(sourceSlice: slice, sourcePhase: 0, pixels: buffer)
             }
@@ -526,31 +546,32 @@ final class PerfusionController: ObservableObject {
 
     private struct MapDefinition {
         let key: String
-        let dicomName: String
+        let units: String
+        var dicomName: String { [L(key), units].filter { !$0.isEmpty }.joined(separator: " ") }
         let window: IsiXWindowLevel
 
-        init(_ key: String, _ dicomName: String, _ center: Double, _ width: Double) {
+        init(_ key: String, _ units: String, _ center: Double, _ width: Double) {
             self.key = key
-            self.dicomName = dicomName
+            self.units = units
             self.window = IsiXWindowLevel(center: center, width: width)
         }
     }
 
     nonisolated private static func mapDefinitions(for model: PerfusionModel) -> [MapDefinition] {
-        let quality = MapDefinition("map.quality", "Fit quality R2", 0.5, 1)
-        let ktrans = MapDefinition("map.ktrans", "Ktrans [1/min]", 0.5, 1)
-        let ve = MapDefinition("map.ve", "ve [%]", 50, 100)
+        let quality = MapDefinition("map.quality", "", 0.5, 1)
+        let ktrans = MapDefinition("map.ktrans", "[1/min]", 0.5, 1)
+        let ve = MapDefinition("map.ve", "[%]", 50, 100)
         switch model {
         case .standardTofts: return [ktrans, ve, quality]
-        case .extendedTofts: return [ktrans, ve, MapDefinition("map.vp", "vp [%]", 50, 100), quality]
+        case .extendedTofts: return [ktrans, ve, MapDefinition("map.vp", "[%]", 50, 100), quality]
         case .deconvolution:
-            return [MapDefinition("map.flow", "Plasma flow [mL/100mL/min]", 250, 500),
-                    MapDefinition("map.volume", "Plasma volume [%]", 10, 20),
-                    MapDefinition("map.mtt", "MTT [s]", 15, 30), quality]
+            return [MapDefinition("map.flow", "[mL/100mL/min]", 250, 500),
+                    MapDefinition("map.volume", "[%]", 10, 20),
+                    MapDefinition("map.mtt", "[s]", 15, 30), quality]
         }
     }
 
-    nonisolated private static func checkCancellation(_ progress: IsiXTaskProgress) throws {
+    nonisolated private static func checkCancellation(_ progress: PerfusionProgress) throws {
         if progress.isCancelled { throw CancellationError() }
         try Task.checkCancellation()
     }

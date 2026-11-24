@@ -24,12 +24,12 @@ private keys are excluded by `.gitignore`.
    ```bash
    git init -b main
    git add .
-   git commit -m "Prepare UMMPerfusionIsiX v0.4.1 source and arm64 plugin"
+   git commit -m "Prepare UMMPerfusionIsiX v0.4.2 source and arm64 plugin"
    git remote add origin https://github.com/YOUR_ACCOUNT/UMMPerfusionIsiX.git
    git push -u origin main
    ```
 
-4. Create a GitHub Release with tag `v0.4.1`. Use `RELEASE_NOTES.md` for the
+4. Create a GitHub Release with tag `v0.4.2`. Use `RELEASE_NOTES.md` for the
    release description and attach the ZIP and `SHA256SUMS.txt` from
    `Release-assets`.
 5. Keep the research status visible in the repository description and
