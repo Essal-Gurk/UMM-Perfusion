@@ -1,3 +1,6 @@
+"field.language" = "Sprache";
+"language.system" = "Systemsprache";
+"help.language" = "Wählen Sie die Sprache der Oberfläche. Texte und Hilfetexte wechseln sofort. Die Auswahl bleibt gespeichert. Verfügbar, wenn keine Berechnung läuft.";
 "help.ktrans" = "Ktrans [1/min]: Transferkonstante zwischen Plasma und extravaskulärem Extrazellulärraum. Die Parameter des gewählten Modells werden gemeinsam angepasst.";
 "help.ve" = "ve [%]: Anteil des extravaskulären Extrazellulärraums am Gewebevolumen.";
 "help.vp" = "vp [%]: Plasmavolumenanteil am Gewebevolumen, geschätzt mit erweitertem Tofts.";

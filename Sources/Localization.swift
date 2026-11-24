@@ -5,17 +5,53 @@ private final class PerfusionBundleMarker: NSObject {}
 enum PerfusionLocalization {
     static let languages = ["en", "fr", "de", "es", "it", "pt", "ja", "zh-Hans", "tr", "ar"]
     static let bundle = Bundle(for: PerfusionBundleMarker.self)
-    static let language = Bundle.preferredLocalizations(from: languages, forPreferences: Locale.preferredLanguages)
-        .first ?? "en"
-    static let localizedBundle = bundle.path(forResource: language, ofType: "lproj").flatMap(Bundle.init(path:))
+    static let defaults = UserDefaults(suiteName: "org.umm-perfusion.isix.native")!
+    static let preferenceKey = "language.v1"
+    static var preference: String {
+        get { defaults.string(forKey: preferenceKey) ?? "system" }
+        set { defaults.set(newValue == "system" || languages.contains(newValue) ? newValue : "system",
+                           forKey: preferenceKey) }
+    }
+    static func resolvedLanguage(for preference: String, preferredLanguages: [String] = Locale.preferredLanguages) -> String {
+        if languages.contains(preference) { return preference }
+        return Bundle.preferredLocalizations(from: languages, forPreferences: preferredLanguages).first ?? "en"
+    }
+    static var language: String { resolvedLanguage(for: preference) }
+    static let localizedBundles: [String: Bundle] = Dictionary(uniqueKeysWithValues: languages.compactMap { code in
+        guard let path = bundle.path(forResource: code, ofType: "lproj"), let localized = Bundle(path: path) else {
+            return nil
+        }
+        return (code, localized)
+    })
     static let englishBundle = bundle.path(forResource: "en", ofType: "lproj").flatMap(Bundle.init(path:))
+
+    static func text(_ key: String, language: String) -> String {
+        let fallback = englishBundle?.localizedString(forKey: key, value: nil, table: nil) ?? key
+        return localizedBundles[language]?.localizedString(forKey: key, value: fallback, table: nil) ?? fallback
+    }
+
+    static func nativeName(for language: String) -> String {
+        switch language {
+        case "en": "English"
+        case "de": "Deutsch"
+        case "fr": "Français"
+        case "es": "Español"
+        case "it": "Italiano"
+        case "pt": "Português"
+        case "ja": "日本語"
+        case "zh-Hans": "简体中文"
+        case "tr": "Türkçe"
+        case "ar": "العربية"
+        default: language
+        }
+    }
 }
 
 func L(_ key: String, _ arguments: any CustomStringConvertible...) -> String {
-    let fallback = PerfusionLocalization.englishBundle?.localizedString(forKey: key, value: nil, table: nil) ?? key
-    let format = PerfusionLocalization.localizedBundle?.localizedString(forKey: key, value: fallback, table: nil) ?? fallback
+    let language = PerfusionLocalization.language
+    let format = PerfusionLocalization.text(key, language: language)
     guard !arguments.isEmpty else { return format }
-    let locale = Locale(identifier: PerfusionLocalization.language)
+    let locale = Locale(identifier: language)
     let values: [any CVarArg] = arguments.map { argument in
         if let integer = argument as? Int {
             return integer.formatted(.number.locale(locale))

@@ -15,3 +15,14 @@ ditto .build/PerfusionEngineTests "$TEST_RUN_DIR/PerfusionEngineTests"
 xattr -cr "$TEST_RUN_DIR/PerfusionEngineTests"
 codesign --force --sign - "$TEST_RUN_DIR/PerfusionEngineTests"
 "$TEST_RUN_DIR/PerfusionEngineTests"
+
+LOCALIZATION_APP="$TEST_RUN_DIR/LocalizationTests.app"
+mkdir -p "$LOCALIZATION_APP/Contents/MacOS" "$LOCALIZATION_APP/Contents/Resources"
+cp Tests/LocalizationTests-Info.plist "$LOCALIZATION_APP/Contents/Info.plist"
+/usr/bin/ruby localize.rb "$LOCALIZATION_APP/Contents/Resources"
+xcrun swiftc -target arm64-apple-macos15.0 \
+  -module-cache-path "$PWD/.build/TestsModuleCache" \
+  Sources/Localization.swift Tests/LocalizationTests.swift \
+  -o "$LOCALIZATION_APP/Contents/MacOS/LocalizationTests"
+codesign --force --sign - "$LOCALIZATION_APP"
+"$LOCALIZATION_APP/Contents/MacOS/LocalizationTests"

@@ -1,3 +1,6 @@
+"field.language" = "Dil";
+"language.system" = "Sistem dili";
+"help.language" = "Arayüz dilini seçin. Metinler ve ipuçları hemen değişir. Seçim kaydedilir. Hesaplama çalışmıyorken kullanılabilir.";
 "help.ktrans" = "Ktrans [1/min]: plazma ile damar dışı hücre dışı alan arasındaki transfer sabiti. Seçili modelin parametreleri birlikte uydurulur.";
 "help.ve" = "ve [%]: doku hacminin yüzdesi olarak damar dışı hücre dışı hacim.";
 "help.vp" = "vp [%]: Genişletilmiş Tofts ile tahmin edilen, doku hacminin yüzdesi olarak plazma hacmi.";

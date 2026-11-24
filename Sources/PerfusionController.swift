@@ -59,6 +59,21 @@ final class PerfusionController: ObservableObject {
     @Published private(set) var isRunning = false
     @Published private(set) var isCancelling = false
     @Published private(set) var canRetryOpening = false
+    @Published private(set) var languageChoice = PerfusionLocalization.preference
+
+    func changeLanguage(to choice: String) {
+        guard !isRunning else { return }
+        let oldLanguage = PerfusionLocalization.language
+        let statusKeys = ["status.ready", "status.cancelled", "status.failed", "status.dicom",
+                          "status.manual", "status.opened", "stage.aif"]
+        let statusKey = statusKeys.first {
+            PerfusionLocalization.text($0, language: oldLanguage) == statusMessage
+        }
+        PerfusionLocalization.preference = choice
+        languageChoice = PerfusionLocalization.preference
+        if let statusKey { statusMessage = L(statusKey) }
+        refresh()
+    }
 
     @Published var model: PerfusionModel = .standardTofts { didSet { persistSettings() } }
     @Published var signalMode: PerfusionSignalMode = .relativeT1 { didSet { persistSettings() } }

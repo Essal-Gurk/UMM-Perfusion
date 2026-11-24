@@ -1,3 +1,6 @@
+"field.language" = "Langue";
+"language.system" = "Langue du système";
+"help.language" = "Choisissez la langue de l’interface. Les textes et les infobulles changent immédiatement. Le choix est mémorisé. Disponible hors calcul.";
 "help.ktrans" = "Ktrans [1/min] : constante de transfert entre le plasma et l’espace extracellulaire extravasculaire. Les paramètres du modèle sont ajustés conjointement.";
 "help.ve" = "ve [%] : volume extracellulaire extravasculaire en pourcentage du volume tissulaire.";
 "help.vp" = "vp [%] : volume plasmatique en pourcentage du volume tissulaire, estimé par Tofts étendu.";

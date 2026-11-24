@@ -1,3 +1,6 @@
+"field.language" = "Idioma";
+"language.system" = "Idioma do sistema";
+"help.language" = "Escolha o idioma da interface. Os textos e as dicas mudam imediatamente. A escolha é guardada. Disponível quando não está a decorrer um cálculo.";
 "help.ktrans" = "Ktrans [1/min]: constante de transferência entre o plasma e o espaço extracelular extravascular. Os parâmetros do modelo são ajustados em conjunto.";
 "help.ve" = "ve [%]: volume extracelular extravascular em percentagem do volume do tecido.";
 "help.vp" = "vp [%]: volume plasmático em percentagem do volume do tecido, estimado pelo Tofts alargado.";

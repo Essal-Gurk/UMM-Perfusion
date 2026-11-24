@@ -1,7 +1,7 @@
-# UMMPerfusionIsiX v0.4
+# UMMPerfusionIsiX v0.4.1
 
 GitHub distribution prepared on 24 November 2026.
-Plugin version 0.4, build 7. Apple Silicon, macOS 15 or later.
+Plugin version 0.4.1, build 8. Apple Silicon, macOS 15 or later.
 Built with IsiXPluginKit 1.0.0 / API v1 from IsiX 6.0.7.
 
 ## Features
@@ -12,6 +12,9 @@ Built with IsiXPluginKit 1.0.0 / API v1 from IsiX 6.0.7.
 - Persistent model, output and numerical settings.
 - Progress display, cancellation and retry opening saved results.
 - Ten languages with parameter-specific mouseover help and Arabic layout.
+- A visible Language menu offers all ten languages and a System language
+  option. Labels and tooltips update immediately. The language selection is
+  retained independently of the existing calculation settings.
 
 ## Distribution changes
 
@@ -20,15 +23,17 @@ limitations. Attribution credits the original UMMPerfusion team in Mannheim
 and cites both foundational papers. The existing BSD 3-Clause licence is
 retained.
 
-Build 7 includes updated attribution and regulatory information in the plugin
-resources. Its computational and interface source matches the earlier 0.4
-build. Documentation describes the EU-MDR/FDA research status and outstanding
-validation.
+Build 8 adds the explicit language selector that was absent in v0.4.
+Language resources are selected dynamically when the selection changes.
+The language control is disabled during a calculation. Existing numerical
+settings and per-model output selections retain their stored values.
 
 ## Verification and limits
 
 The SDK-verified arm64 build, deterministic synthetic tests, ten-language
 catalogue checks, code signature and installer have been checked locally.
+Localization regression tests exercise all ten selections, returning to
+system-language selection, live German/English switching and tooltip lookup.
 Independent clinical/DRO validation and complete visual acceptance of all
 language layouts remain outstanding.
 

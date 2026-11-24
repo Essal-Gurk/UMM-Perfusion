@@ -1,3 +1,6 @@
+"field.language" = "语言";
+"language.system" = "系统语言";
+"help.language" = "选择界面语言。文字和提示将立即切换，选择会保存。可在未进行计算时更改。";
 "help.ktrans" = "Ktrans [1/min]：血浆与血管外细胞外间隙之间的转移常数。所选模型的参数需联合拟合。";
 "help.ve" = "ve [%]：血管外细胞外间隙容积占组织容积的百分比。";
 "help.vp" = "vp [%]：扩展 Tofts 估计的血浆容积占组织容积的百分比。";

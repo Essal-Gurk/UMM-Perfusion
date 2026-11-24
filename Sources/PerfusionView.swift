@@ -6,7 +6,22 @@ struct PerfusionView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
-                Text(L("title")).font(.largeTitle.bold())
+                HStack(alignment: .top) {
+                    Text(L("title")).font(.largeTitle.bold())
+                    Spacer()
+                    Picker(L("field.language"), selection: Binding(
+                        get: { controller.languageChoice },
+                        set: { controller.changeLanguage(to: $0) }
+                    )) {
+                        Text(L("language.system")).tag("system")
+                        ForEach(PerfusionLocalization.languages, id: \.self) { code in
+                            Text(PerfusionLocalization.nativeName(for: code)).tag(code)
+                        }
+                    }
+                    .frame(maxWidth: 270)
+                    .help(L("help.language"))
+                    .disabled(controller.isRunning)
+                }
                 Text(L("research")).foregroundStyle(.secondary)
                 source
                 settings

@@ -66,9 +66,12 @@ Every build checks SDK API/kit version, deployment target, arm64 availability
 and the framework/interface hashes against `SDK.json`. The verified manifest
 is included in the plugin resources and in `docs/SDK.json`.
 
-The v0.2 preference domain and settings schema remain in use in v0.4, including
+The v0.2 preference domain and settings schema remain in use in v0.4.1, including
 per-model map selections and the optional DICOM saving setting. The stored
 settings contain numerical options and output choices.
+
+The explicit language choice uses the separate `language.v1` preference.
+Existing `settings.v1` calculation preferences require no migration.
 
 Runtime validation inside IsiX still requires the viewer/ROI/import acceptance
 tests in `VALIDATION.md`; compilation cannot substitute for that test.

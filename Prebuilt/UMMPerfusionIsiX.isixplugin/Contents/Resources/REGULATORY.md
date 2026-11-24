@@ -4,7 +4,7 @@ Reviewed against the sources linked below on 24 November 2026.
 
 ## Scope of this release
 
-UMMPerfusionIsiX 0.4 is released for software development, teaching and
+UMMPerfusionIsiX 0.4.1 is released for software development, teaching and
 exploratory perfusion-method research. The release excludes clinical
 diagnosis, treatment selection, patient monitoring and report sign-off from
 its intended use. Independent clinical validation is outstanding.

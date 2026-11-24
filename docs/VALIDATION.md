@@ -71,7 +71,10 @@ limits.
 8. Change the selected model, map checkboxes, output save option and numerical
    settings. Close/reopen the plugin and restart IsiX. Verify every choice is
    restored and map selections remain independent between models.
-9. Launch IsiX with each of the ten supported preferred languages. Verify the
+9. Select each of the ten languages from the Language menu at the top of the
+   plugin window. Verify that the interface and tooltips change immediately
+   and that the selected language survives an IsiX restart. Select System
+   language to return to the system preference. Verify the
    translated interface, status messages and tooltips over each map checkbox,
    the selected model, signal conversion and output setting. Check Arabic
    right-to-left layout and readable mixed Latin parameter names and units.

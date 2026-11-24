@@ -1,7 +1,7 @@
 # UMMPerfusionIsiX
 
 Native MRI perfusion research plugin for IsiX DICOM Viewer on Apple Silicon.
-Version 0.4 uses IsiXPluginKit 1.0.0 / API v1, built against the SDK from
+Version 0.4.1 uses IsiXPluginKit 1.0.0 / API v1, built against the SDK from
 IsiX 6.0.7.
 
 This repository includes the Swift source, synthetic tests and a precompiled
@@ -56,7 +56,11 @@ surrogates. DICOM acquisition times are used when complete and strictly
 increasing. Otherwise, the explicitly entered phase interval is used.
 The status reports the timing source.
 
-The interface follows the preferred system language. The ten languages are
+The **Language** menu at the top of the plugin window selects the interface
+language. **System language** follows the preferred system language.
+Labels and mouseover help change immediately, and the selection is retained
+across restarts. Change the language when no calculation is running.
+The ten languages are
 English, German, French, Spanish, Italian, Portuguese, Japanese, Simplified
 Chinese, Turkish and Arabic. Arabic uses a right-to-left layout.
 

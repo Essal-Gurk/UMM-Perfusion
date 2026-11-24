@@ -1,4 +1,7 @@
 key|tr|ar
+field.language|Dil|اللغة
+language.system|Sistem dili|لغة النظام
+help.language|Arayüz dilini seçin. Metinler ve ipuçları hemen değişir. Seçim kaydedilir. Hesaplama çalışmıyorken kullanılabilir.|اختر لغة الواجهة. تتغير النصوص والتلميحات فورًا ويُحفظ الاختيار. متاح عندما لا يكون الحساب قيد التشغيل.
 button.run|Hesapla|احسب
 field.output|Çıktı|الإخراج
 option.save|Yeni DICOM serileri olarak da kaydet|احفظ أيضًا كسلاسل DICOM جديدة

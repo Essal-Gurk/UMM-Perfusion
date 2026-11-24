@@ -15,5 +15,5 @@ When using the ZIP, extract it first and select the extracted UMM-Perfusion
 folder. Keep its hidden .git directory with the rest of the files.
 
 The release ZIP and checksums are available separately in Release-assets
-inside the full GitHub-ready package. Attach them to a v0.4 GitHub Release
+inside the full GitHub-ready package. Attach them to a v0.4.1 GitHub Release
 after publishing the repository.
