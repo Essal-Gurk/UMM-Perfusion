@@ -212,3 +212,8 @@ signal-conversion assumptions and parameters.
 The source and this plugin distribution use the BSD 3-Clause licence.
 Retain its notices when redistributing source or binaries.
 See [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY.md).
+
+<img width="945" height="819" alt="Bildschirmfoto 2026-11-24 um 19 06 07" src="https://github.com/user-attachments/assets/6a9a9b37-e4c3-44f1-ae32-df96fdb289e7" />
+
+
+<img width="1600" height="991" alt="Bildschirmfoto 2026-11-24 um 18 57 15" src="https://github.com/user-attachments/assets/2b65d4c3-035d-4945-9c4e-ba73bc1a07ec" />
